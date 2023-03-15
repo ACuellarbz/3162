@@ -1,0 +1,1 @@
+DELETE FROM mileage_of_trip;

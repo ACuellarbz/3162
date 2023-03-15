@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS mileage_of_trip CASCADE;

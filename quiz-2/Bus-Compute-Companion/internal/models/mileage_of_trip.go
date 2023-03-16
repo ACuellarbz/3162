@@ -22,6 +22,7 @@ type MileageModel struct {
 func (m *MileageModel) Get() (*MileageofTrip, error) {
 	var o MileageofTrip
 
+	
 	statement := `
 				SELECT id, beginning_location_id, destination_location_id, total_miles
 				FROM mileage_of_trip

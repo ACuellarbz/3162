@@ -1,4 +1,4 @@
-INSERT INTO user_info(id, fname, lname, email, addres, phone_number, passwrd)
+INSERT INTO users_info(id, fname, lname, email, addres, phone_number, passwrd)
 VALUES
 (1, 'James', 'Camron', 'jcamron@gmail.com', '15 J Street', '6001234', 'monkey123'),
 (2, 'Mary', 'Elizabeth', 'mbeth@gmail.com', '25 Mason Avenue', '6123400', 'jesussaves1'),

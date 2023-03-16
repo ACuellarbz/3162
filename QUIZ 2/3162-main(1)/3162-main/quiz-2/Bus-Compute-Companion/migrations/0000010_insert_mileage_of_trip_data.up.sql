@@ -1,4 +1,5 @@
 INSERT INTO mileage_of_trip(id, beginning_location_id, destination_location_id, total_miles)
+VALUES
 (1, 001, 002, 23),
 (2, 001, 002, 27),
 (3, 001, 002, 39),

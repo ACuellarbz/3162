@@ -31,5 +31,5 @@ func (m *LocationModel) Get() (*Location, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &l, err
+	return &l, nil
 }

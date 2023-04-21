@@ -34,5 +34,5 @@ func (m *RouteModel) Get() (*Route, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &o, err
+	return &o, nil
 }

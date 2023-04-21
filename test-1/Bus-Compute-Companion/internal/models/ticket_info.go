@@ -33,5 +33,5 @@ func (m *SeatModel) Get() (*Seats, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &t, err
+	return &t, nil
 }

@@ -36,5 +36,5 @@ func (m *UserModel) Get() (*User, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &u, err
+	return &u, nil
 }

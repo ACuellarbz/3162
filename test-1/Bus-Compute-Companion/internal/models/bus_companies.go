@@ -31,5 +31,5 @@ func (m *BusCompanyModel) Get() (*BusCompany, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &c, err
+	return &c, nil
 }

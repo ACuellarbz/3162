@@ -8,6 +8,23 @@ import (
 	"time"
 )
 
+//Spoofing the METHOD
+func MethodOverride(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" {
+			//checking if method called is PUT
+			method := r.PostFormValue("_method")
+			if method == "" {
+				method = r.Header.Get("X-HTTP-Method-Override")
+			}
+
+			if method == "PUT" || method == "PATCH" || method == "DELETE" {
+				r.Method = method
+			}
+		}
+		next.ServeHTTP(w, r)
+	})
+}
 func securityHeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {

@@ -53,10 +53,53 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Will ask user which schedule ID to update
+func (app *application) updateScheduleShow(w http.ResponseWriter, r *http.Request) {
+	RenderTemplate(w, "schedule.update.request.tmpl", nil)
+}
+
+// handles the request for id update
 func (app *application) updateSchedule(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+	}
+	id := r.PostForm.Get("id")
+
+	info, err := app.bus_schedule.SearchRecord(id)
+	log.Println(info)
+
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w,
+			http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+		return
+	}
+
+	data := &templateData{
+		ScheduleByte: info,
+	}
+	RenderTemplate(w, "schedule.update.tmpl", data)
 
 }
 
-func (app *application) deleteR(w http.ResponseWriter, r *http.Request) {
+func (app *application) deleteRouteShow(w http.ResponseWriter, r *http.Request) {
+	RenderTemplate(w, "schedule.delete.tmpl", nil)
 
+}
+func (app *application) deleteRoute(w http.ResponseWriter, r *http.Request) {
+	log.Println("THE DELETE WORKS IT RECOGNIZES THE DELETE")
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+	}
+	id := r.PostForm.Get("id")
+	err = app.bus_schedule.Delete(id)
+
+	log.Println(err)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
 }

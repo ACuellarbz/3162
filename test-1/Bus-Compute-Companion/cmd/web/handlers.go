@@ -22,6 +22,7 @@ func (app *application) tickets(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Read Implementation
 func (app *application) scheduleShow(w http.ResponseWriter, r *http.Request) {
 	log.Println("Entered Schedule")
 	schedule, err := app.bus_schedule.Get()
@@ -38,6 +39,7 @@ func (app *application) scheduleFormShow(w http.ResponseWriter, r *http.Request)
 	RenderTemplate(w, "schedule.add.tmpl", nil)
 
 }
+//POST METHOD implementation of Create
 func (app *application) scheduleFormSubmit(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -61,13 +63,12 @@ func (app *application) login(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Will ask user which schedule ID to update
+// Displays Update Request Page
 func (app *application) updateScheduleShow(w http.ResponseWriter, r *http.Request) {
 	RenderTemplate(w, "schedule.update.request.tmpl", nil)
 }
 
-// handles the request for id update
-// USES FUNCTION SearchRecord and is connected to the schedule.update.tmpl and the ScheduleByte Struct
+// POST METHOD Implementation for Update
 func (app *application) updateSchedule(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -78,6 +79,9 @@ func (app *application) updateSchedule(w http.ResponseWriter, r *http.Request) {
 	begin_location := r.PostForm.Get("begin_id")
 	destin_location := r.PostForm.Get("destination_id")
 
+	// Due to not changing the URL whenever the "schedule.update.tmpl" is loaded it caused errors when resubmitting the form.
+	//This is because it executes the function once again so a workaround was added. If "company" would have any value,
+	//it would indicate that the "schedule.update.tmpl" called the Post Method.
 	if company != "" {
 		log.Println("Im inside the if statement is this working")
 		err = app.bus_schedule.Update(id, company, begin_location, destin_location)

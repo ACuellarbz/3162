@@ -22,7 +22,7 @@ func (app *application) tickets(w http.ResponseWriter, r *http.Request) {
 
 }
 
-//Read Implementation
+// Read Implementation
 func (app *application) scheduleShow(w http.ResponseWriter, r *http.Request) {
 	log.Println("Entered Schedule")
 	schedule, err := app.bus_schedule.Get()
@@ -39,7 +39,8 @@ func (app *application) scheduleFormShow(w http.ResponseWriter, r *http.Request)
 	RenderTemplate(w, "schedule.add.tmpl", nil)
 
 }
-//POST METHOD implementation of Create
+
+// POST METHOD implementation of Create
 func (app *application) scheduleFormSubmit(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -75,25 +76,6 @@ func (app *application) updateSchedule(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "bad request", http.StatusBadRequest)
 	}
 	id := r.PostForm.Get("id")
-	company := r.PostForm.Get("company_id")
-	begin_location := r.PostForm.Get("begin_id")
-	destin_location := r.PostForm.Get("destination_id")
-
-	// Due to not changing the URL whenever the "schedule.update.tmpl" is loaded it caused errors when resubmitting the form.
-	//This is because it executes the function once again so a workaround was added. If "company" would have any value,
-	//it would indicate that the "schedule.update.tmpl" called the Post Method.
-	if company != "" {
-		log.Println("Im inside the if statement is this working")
-		err = app.bus_schedule.Update(id, company, begin_location, destin_location)
-		log.Println(err)
-		if err != nil {
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-			return
-		}
-		return
-	}
-	log.Println("Im outside.")
-
 	info, schedule_id, err := app.bus_schedule.SearchRecord(id)
 
 	if err != nil {
@@ -134,6 +116,24 @@ func (app *application) updateSchedule(w http.ResponseWriter, r *http.Request) {
 			http.StatusText(http.StatusInternalServerError),
 			http.StatusInternalServerError)
 	}
+}
+func (app *application) updateRecords(w http.ResponseWriter, r *http.Request) {
+	log.Println("Im inside updateRecords")
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "bad request", http.StatusBadRequest)
+	}
+	id := r.PostForm.Get("id")
+	company := r.PostForm.Get("company_id")
+	begin_location := r.PostForm.Get("begin_id")
+	destin_location := r.PostForm.Get("destination_id")
+	err = app.bus_schedule.Update(id, company, begin_location, destin_location)
+	log.Println(err)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		return
+	}
+
 }
 
 func (app *application) deleteRouteShow(w http.ResponseWriter, r *http.Request) {

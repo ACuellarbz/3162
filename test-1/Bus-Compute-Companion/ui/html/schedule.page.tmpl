@@ -5,8 +5,6 @@
         <h1>Schedule For Busses For Today</h1>
     </div>
     <div>
-        <form method = "POST" action="/schedule">
-            <input type="hidden" name="_method" value="DELETE">
             <table>
                 <tr>
                     <th>Company</th>
@@ -18,10 +16,8 @@
                     <td>{{.Schedule.CompanyID}}</td>
                     <td>{{.Schedule.BeginningID}}</td>
                     <td>{{.Schedule.DestinationID}}</td>
-                    <td><button type="submit">Submit</button></td>
                 </tr>
             </table>
-        </form>
     </div>
 </div>
 {{end}}

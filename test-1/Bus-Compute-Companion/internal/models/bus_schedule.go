@@ -76,7 +76,7 @@ func (m *BusScheduleModel) Get() (*BusSchedule, error) {
 }
 
 // Credit: Interpretation of Hipolito's Read Function
-func (m *BusScheduleModel) SearchRecord(schedule_id string) ([]*BusSchedule, error) {
+func (m *BusScheduleModel) SearchRecord(schedule_id string) ([]*BusSchedule, string, error) {
 	//SQL statement
 	statement :=
 		`
@@ -84,9 +84,10 @@ func (m *BusScheduleModel) SearchRecord(schedule_id string) ([]*BusSchedule, err
 			FROM bus_schedule
 			WHERE id = $1
 		`
+	failure := "program failed"
 	data, err := m.DB.Query(statement, schedule_id)
 	if err != nil {
-		return nil, err
+		return nil, failure, err
 	}
 	defer data.Close()
 	log.Println(data)
@@ -101,10 +102,29 @@ func (m *BusScheduleModel) SearchRecord(schedule_id string) ([]*BusSchedule, err
 	routes = append(routes, route)
 	if err != nil {
 		fmt.Println(err)
-		return nil, err
+		return nil, failure, err
 	}
 	if err = data.Err(); err != nil {
-		return nil, err
+		return nil, failure, err
 	}
-	return routes, nil
+	return routes, schedule_id, nil
+}
+
+func (m *BusScheduleModel) Update(schedule_id string, company string, beginning string, destination string) error {
+	statement := `
+			UPDATE bus_schedule
+			SET id = $1, company_id = $2, beginning_location_id = $3, destination_location_id= $4
+			WHERE id = $5
+	`
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+	//sets the timeout for the DB connection, passes the statements and associates the arguements with the place holders in the SQL ($1, $2 etc)
+	_, err := m.DB.ExecContext(ctx, statement, schedule_id, company, beginning, destination, schedule_id)
+
+	if err != nil {
+		fmt.Println(err)
+		return err
+
+	}
+	return nil
 }

@@ -20,10 +20,11 @@ func (app *application) routes() http.Handler {
 	router.Handler(http.MethodGet, "/schedule", dynamicMiddleware.ThenFunc(app.scheduleShow))               //Default Page
 	router.Handler(http.MethodGet, "/schedule/create", dynamicMiddleware.ThenFunc(app.scheduleFormShow))    //Show Forums
 	router.Handler(http.MethodPost, "/schedule/create", dynamicMiddleware.ThenFunc(app.scheduleFormSubmit)) //Adding Items to the database
-	router.Handler(http.MethodGet, "/schedule/update", dynamicMiddleware.ThenFunc(app.updateScheduleShow))            
-	router.Handler(http.MethodPost, "/schedule/update", dynamicMiddleware.ThenFunc(app.updateSchedule))             //Update a schedule record or etc
-	router.Handler(http.MethodGet, "/schedule/delete", dynamicMiddleware.ThenFunc(app.deleteRouteShow))    //Show Forums
-	router.Handler(http.MethodDelete, "/schedule/delete", dynamicMiddleware.ThenFunc(app.deleteRoute))                 //Deleting Records
+	router.Handler(http.MethodGet, "/schedule/update", dynamicMiddleware.ThenFunc(app.updateScheduleShow))
+	router.Handler(http.MethodPost, "/schedule/update", dynamicMiddleware.ThenFunc(app.updateSchedule)) //Update a schedule record or etc
+	router.Handler(http.MethodGet, "/schedule/update/action", dynamicMiddleware.ThenFunc(nil))
+	router.Handler(http.MethodGet, "/schedule/delete", dynamicMiddleware.ThenFunc(app.deleteRouteShow)) //Show Forums
+	router.Handler(http.MethodDelete, "/schedule/delete", dynamicMiddleware.ThenFunc(app.deleteRoute))  //Deleting Records
 
 	standardMiddleware := alice.New(MethodOverride, app.RecoverPanicMiddleware,
 		app.logRequestMiddleware,
